@@ -12,11 +12,15 @@ export async function GET(request) {
 
     console.log("URL utilisée :", apiUrl);
 
-    const response = await fetch(apiUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-      }
-    });
+    
+   const response = await fetch(apiUrl, {
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+    'Accept': 'application/json',
+    'Origin': 'https://tracker.gg',
+    'Referer': 'https://tracker.gg/'
+  }
+});
 
     if (!response.ok) {
       return Response.json({ error: `Joueur non trouvé: ${username}#${tagline}` }, { status: 404 });
