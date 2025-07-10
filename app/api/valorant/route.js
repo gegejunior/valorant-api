@@ -6,8 +6,10 @@ export async function GET(request) {
   const onlyRank = searchParams.get('onlyRank');
 
   try {
-    const riotId = `${username}-${tagline}`;
-    const apiUrl = `https://api.tracker.gg/api/v2/valorant/standard/profile/riot/${riotId}`;
+    const riotId = `${username}#${tagline}`;
+    const encodedRiotId = encodeURIComponent(riotId);
+    const apiUrl = `https://api.tracker.gg/api/v2/valorant/standard/profile/riot/${encodedRiotId}`;
+
     console.log("URL utilisée :", apiUrl);
 
     const response = await fetch(apiUrl, {
