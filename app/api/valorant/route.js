@@ -12,7 +12,8 @@ export async function GET(request) {
     const response = await fetch(apiUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'TRN-Api-Key': '4bcddc11-91e5-420c-a793-ef34f8b58d63'  // Ta clé API ici
       }
     });
 
