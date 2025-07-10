@@ -33,27 +33,36 @@ if (!response.ok) {
 
     const data = await response.json();
     const segments = data.data?.segments || [];
-    const overviewSegment = segments.find(s => s.type === 'overview');
 
-    if (!overviewSegment) {
-      return Response.json({ error: 'Données de rang non trouvées' }, { status: 404 });
-    }
+// Affiche les segments
+console.log('Segments:', JSON.stringify(segments, null, 2));
 
-    const rankData = overviewSegment.stats?.rank;
-    const currentRank = rankData?.displayValue || 'Non classé';
+// Cherche segment type 'competitive' ou 'overview' (selon ce que tu trouves)
+const rankSegment = segments.find(s => s.type === 'competitive') || segments.find(s => s.type === 'overview');
 
-    if (onlyRank === 'true') {
-      return new Response(currentRank);
-    }
-
-    return Response.json({
-      rank: currentRank,
-      username: `${username}#${tagline}`,
-      region: region?.toUpperCase() ?? 'N/A'
-    });
-
-  } catch (error) {
-    return Response.json({ error: `Erreur: ${error.message}` }, { status: 500 });
-  }
+if (!rankSegment) {
+  return Response.json({ error: 'Données de rang non trouvées' }, { status: 404 });
 }
 
+// Inspecte les stats disponibles
+console.log('Rank segment stats:', JSON.stringify(rankSegment.stats, null, 2));
+
+// Exemple d’extraction du rang, à adapter selon la structure :
+const rankData = rankSegment.stats?.rank || rankSegment.stats?.competitiveTier;
+
+const currentRank = rankData?.displayValue || 'Non classé';
+
+if (!rankData) {
+  return Response.json({ error: 'Données de rang absentes dans segment' }, { status: 404 });
+}
+
+if (onlyRank === 'true') {
+  return new Response(currentRank);
+}
+
+return Response.json({
+  rank: currentRank,
+  username: `${username}#${tagline}`,
+  region: region?.toUpperCase() ?? 'N/A'
+});
+      
