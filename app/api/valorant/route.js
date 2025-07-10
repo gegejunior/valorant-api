@@ -22,9 +22,14 @@ export async function GET(request) {
   }
 });
 
-    if (!response.ok) {
-      return Response.json({ error: `Joueur non trouvé: ${username}#${tagline}` }, { status: 404 });
-    }
+    
+
+if (!response.ok) {
+  const text = await response.text();
+  console.log('TrackerGG API error:', response.status, text);
+  return Response.json({ error: `Joueur non trouvé: ${username}#${tagline}`, details: text }, { status: response.status });
+}
+
 
     const data = await response.json();
     const segments = data.data?.segments || [];
